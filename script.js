@@ -48,8 +48,6 @@ const getFetchData = (url) => {
     fetch(url)
         .then(res => {
             if ( res.ok ) {
-                // updateLocalStorage(res.json());
-                // console.log(res.json());
                 return res.json();
             } else {
                 console.log('ERROR');
@@ -58,23 +56,25 @@ const getFetchData = (url) => {
         })
         .then(res => {
             console.log(res.articles);
+            localStorage.setItem('res', res);
             return res;
         })
-        .then(data => renderAllNews(data))
+        .then(res => renderAllNews(res))
         .catch(error => console.log('ERROR', error));
 }
 
-const updateLocalStorage = () => {
-    localStorage.setItem('key', 'value');
-    console.log(localStorage.getItem('key'));
+const updateLocalStorage = (key, value) => {
+    localStorage.setItem(key, value);
+    console.log(localStorage.getItem(key));
 }
 
 getFetchData(newsServerLink);
 
-updateLocalStorage();
+updateLocalStorage('key5', 'value6');
 
 console.log(newsStorage);
 
+console.log(localStorage.getItem('res'));
 
 // localStorage.setItem('myCat', 'Tom');
 // let cat = localStorage.getItem('myCat');
