@@ -1,6 +1,12 @@
+const newsStorage = window.localStorage;
 const cardPlaceholder = document.querySelector('.card-placeholder');
+let newsServerLink = "https://newsapi.org/v2/top-headlines?country=ua&apiKey=c72e232594004f868b23074156aa6ec8";
 
-const cardBuilder = obj => {
+const checkCyrillic = (str) => {
+    return str.split('').map(i => i.charCodeAt()).filter(i => i > 1040 && i < 1103).length > 3;
+}
+
+const cardBuilder = (obj) => {
     const newCard = document.createElement('div');
     newCard.classList.add('card');
     const cardTitle = document.createElement('h3');
@@ -28,30 +34,49 @@ const cardBuilder = obj => {
         cardLink.append(cardTitle);
         newCard.append(cardDescription);
     }
-};
-
-// http://universities.hipolabs.com/search?country=United+States
-// console.log('thdhфуафуауаї 454кпуп ыы'.split('').filter(i => i.charCodeAt(0) > 1040 && i.charCodeAt(0) < 1103));
-
-function checkCyrillic(str) {
-    return str.split('').map(i => i.charCodeAt()).filter(i => i > 1040 && i < 1103).length > 3;
 }
 
-    fetch("https://newsapi.org/v2/top-headlines?country=ua&apiKey=c72e232594004f868b23074156aa6ec8")
+const renderAllNews = (data) => {
+    // console.log(data.articles.slice(0, 31));
+    data.articles
+        .slice(0, 200)
+        .filter(obj => checkCyrillic(obj.title))
+        .forEach(item => cardBuilder(item));
+}
+
+const getFetchData = (url) => {
+    fetch(url)
         .then(res => {
             if ( res.ok ) {
+                // updateLocalStorage(res.json());
+                // console.log(res.json());
                 return res.json();
             } else {
                 console.log('ERROR');
                 throw Error;
             }
         })
-        .then(data => {
-            console.log(data.articles.slice(0, 30));
-            // console.log(JSON.stringify(data));
-            data.articles
-                .slice(0, 200)
-                .filter(obj => checkCyrillic(obj.title))
-                .forEach(item => cardBuilder(item));
+        .then(res => {
+            console.log(res.articles);
+            return res;
         })
+        .then(data => renderAllNews(data))
         .catch(error => console.log('ERROR', error));
+}
+
+const updateLocalStorage = () => {
+    localStorage.setItem('key', 'value');
+    console.log(localStorage.getItem('key'));
+}
+
+getFetchData(newsServerLink);
+
+updateLocalStorage();
+
+console.log(newsStorage);
+
+
+// localStorage.setItem('myCat', 'Tom');
+// let cat = localStorage.getItem('myCat');
+// console.log(cat);
+
