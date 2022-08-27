@@ -2,6 +2,13 @@ const newsStorage = window.localStorage;
 const cardPlaceholder = document.querySelector('.card-placeholder');
 let newsServerLink = "https://newsapi.org/v2/top-headlines?country=ua&apiKey=c72e232594004f868b23074156aa6ec8";
 
+localStorage.clear();
+
+const updateLocalStorage = (key, value) => {
+    localStorage.setItem(key, value);
+    console.log(localStorage.getItem(key));
+}
+
 const checkCyrillic = (str) => {
     return str.split('').map(i => i.charCodeAt()).filter(i => i > 1040 && i < 1103).length > 3;
 }
@@ -56,27 +63,19 @@ const getFetchData = (url) => {
         })
         .then(res => {
             console.log(res.articles);
-            localStorage.setItem('res', res);
+            // localStorage.setItem('res', 12345);
             return res;
         })
         .then(res => renderAllNews(res))
         .catch(error => console.log('ERROR', error));
 }
 
-const updateLocalStorage = (key, value) => {
-    localStorage.setItem(key, value);
-    console.log(localStorage.getItem(key));
-}
-
 getFetchData(newsServerLink);
-
-updateLocalStorage('key5', 'value6');
 
 console.log(newsStorage);
 
 console.log(localStorage.getItem('res'));
 
-// localStorage.setItem('myCat', 'Tom');
-// let cat = localStorage.getItem('myCat');
-// console.log(cat);
+const modalWindowCreator = (data, func, parent) => {
 
+}
