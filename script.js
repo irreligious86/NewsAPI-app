@@ -77,5 +77,21 @@ console.log(newsStorage);
 console.log(localStorage.getItem('res'));
 
 const modalWindowCreator = (data, func, parent) => {
-    data, func, parent;
+    const modalWindow = document.createElement('div');
+    modalWindow.classList.add('modal-window');
+    parent.prepend(modalWindow);
+
+    const cancelBtn = document.createElement('button');
+    modalWindow.append(cancelBtn);
+    cancelBtn.classList.add('cancel-btn');
+    document.createTextNode('Cancel');
+
+    const applyBtn = document.createElement('button');
+    modalWindow.append(applyBtn);
+    applyBtn.classList.add('apply-btn');
+    document.createTextNode('Apply');
+
+    cancelBtn.addEventListener('click', )
+
+    applyBtn.addEventListener('click', )
 }
