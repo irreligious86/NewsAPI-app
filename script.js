@@ -1,4 +1,5 @@
 const cardPlaceholder = document.querySelector('.card-placeholder');
+let dataArticles = [];
 
 const cardBuilder = obj => {
     const newCard = document.createElement('div');
@@ -30,12 +31,70 @@ const cardBuilder = obj => {
     }
 };
 
-// http://universities.hipolabs.com/search?country=United+States
-// console.log('thdhфуафуауаї 454кпуп ыы'.split('').filter(i => i.charCodeAt(0) > 1040 && i.charCodeAt(0) < 1103));
-
 function checkCyrillic(str) {
     return str.split('').map(i => i.charCodeAt()).filter(i => i > 1040 && i < 1103).length > 3;
 }
+
+function renderCurrentNews(data) {
+  data
+  .slice(0, 200)
+  .filter(obj => checkCyrillic(obj.title))
+  .forEach(item => cardBuilder(item));
+}
+
+const newPostCreator = () => {
+  const addNewPostModal = document.createElement('div');
+  document.body.prepend(addNewPostModal);
+  addNewPostModal.classList.add('add-new-post-modal');
+
+  const subtitleInput = document.createElement('input');
+  subtitleInput.classList.add('new-post-creator-input');
+  addNewPostModal.append(subtitleInput);
+  subtitleInput.placeholder = 'Subtitle text';
+
+  const imgInput = document.createElement('input');
+  imgInput.classList.add('new-post-creator-input');
+  addNewPostModal.append(imgInput);
+  imgInput.placeholder = 'Image link';
+
+  const titleInput = document.createElement('input');
+  titleInput.classList.add('new-post-creator-input');
+  addNewPostModal.append(titleInput);
+  titleInput.placeholder = 'Title link';
+
+  const descriptionInput = document.createElement('input');
+  descriptionInput.classList.add('new-post-creator-input');
+  addNewPostModal.append(descriptionInput);
+  descriptionInput.placeholder = 'Description text';
+
+  const cancelBtn = document.createElement('button');
+  cancelBtn.append(document.createTextNode('Cancel'));
+  cancelBtn.classList.add('cancel-btn');
+  addNewPostModal.append(cancelBtn);
+
+  const applyBtn = document.createElement('button');
+  applyBtn.append(document.createTextNode('Apply'));
+  applyBtn.classList.add('apply-btn');
+  addNewPostModal.append(applyBtn);
+
+  cancelBtn.addEventListener('click', () => {
+    addNewPostModal.remove();
+  });
+
+  applyBtn.addEventListener('click', () => {
+    const newPost = {};
+    newPost.author = subtitleInput.value;
+    newPost.urlToImage = imgInput.value;
+    newPost.title = titleInput.value;
+    newPost.description = descriptionInput.value;
+    dataArticles.unshift(newPost);
+    console.log(dataArticles);
+    addNewPostModal.remove();
+    // document.location.reload();
+    renderCurrentNews(dataArticles);
+    dataArticles.forEach(i => carsdBuilder(i));
+  });
+};
 
     fetch("https://newsapi.org/v2/top-headlines?country=ua&apiKey=c72e232594004f868b23074156aa6ec8")
         .then(res => {
@@ -47,11 +106,13 @@ function checkCyrillic(str) {
             }
         })
         .then(data => {
-            console.log(data.articles.slice(0, 30));
-            // console.log(JSON.stringify(data));
-            data.articles
-                .slice(0, 200)
-                .filter(obj => checkCyrillic(obj.title))
-                .forEach(item => cardBuilder(item));
+          dataArticles = data.articles;
+          renderCurrentNews(dataArticles);
         })
         .catch(error => console.log('ERROR', error));
+
+document.querySelector('.reload-btn').addEventListener('click', () => {
+  document.location.reload();
+});
+
+document.querySelector('.new-add-btn').addEventListener('click', newPostCreator);

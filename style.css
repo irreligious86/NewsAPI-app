@@ -14,6 +14,8 @@ body {
 
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 .app-wrapper {
@@ -91,6 +93,67 @@ body {
 
 
 .footer {
-    height: 100px;
+    height: 50px;
 }
 
+.reload-btn {
+  margin: 15px;
+  padding: 10px 25px;
+  border-radius: 5px;
+  background-color: rgb(9, 45, 8);
+  color: aquamarine;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.new-add-btn {
+  margin: 15px;
+  padding: 10px 25px;
+  border-radius: 5px;
+  background-color: rgb(9, 45, 8);
+  color: rgb(83, 162, 226);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.add-new-post-modal {
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  height: 100vh;
+  padding: 25px;
+  background-color: rgba(0, 0, 0, 0.95);
+}
+
+.new-post-creator-input {
+  display: block;
+  margin: 15px;
+  padding: 5px 12px;
+  font-size: medium;
+}
+
+.new-post-creator-input:focus {
+  background-color: aquamarine;
+}
+
+.cancel-btn, .apply-btn {
+  display:inline-block;
+  margin: 15px;
+  padding: 8px 20px;
+  font-size: medium;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid #aaa;
+}
+
+.cancel-btn {
+  background-color: red;
+}
+
+.apply-btn {
+  background-color: green;
+}
+
+.apply-btn:hover, .cancel-btn:hover {
+  border: 1px solid cyan;
+}
