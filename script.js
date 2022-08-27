@@ -77,5 +77,5 @@ console.log(newsStorage);
 console.log(localStorage.getItem('res'));
 
 const modalWindowCreator = (data, func, parent) => {
-
+    data, func, parent;
 }
