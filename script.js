@@ -1,4 +1,6 @@
 const newsStorage = window.localStorage;
+const reloadBtn = document.querySelector('.reload-btn');
+const createPostBtn = document.querySelector('.create-post-btn');
 const cardPlaceholder = document.querySelector('.card-placeholder');
 let newsServerLink = "https://newsapi.org/v2/top-headlines?country=ua&apiKey=c72e232594004f868b23074156aa6ec8";
 
@@ -63,7 +65,6 @@ const getFetchData = (url) => {
         })
         .then(res => {
             console.log(res.articles);
-            // localStorage.setItem('res', 12345);
             return res;
         })
         .then(res => renderAllNews(res))
@@ -72,26 +73,72 @@ const getFetchData = (url) => {
 
 getFetchData(newsServerLink);
 
-console.log(newsStorage);
+// console.log(newsStorage);
+// console.log(localStorage.getItem('res'));
 
-console.log(localStorage.getItem('res'));
-
-const modalWindowCreator = (data, func, parent) => {
+const modalWindowCreator = () => {
     const modalWindow = document.createElement('div');
     modalWindow.classList.add('modal-window');
-    parent.prepend(modalWindow);
+    document.body.prepend(modalWindow);
+
+    const titleInput = document.createElement('input');
+    titleInput.classList.add('modal-input');
+    
+    titleInput.placeholder = 'Type title text here';
+
+    const authorInput = document.createElement('input');
+    authorInput.classList.add('modal-input');
+    authorInput.placeholder = 'Type author here';
+
+    const imgInput = document.createElement('textarea');
+    imgInput.classList.add('modal-input');
+    imgInput.placeholder = 'Type image link here';
+
+    const sourceLinkInput = document.createElement('textarea');
+    sourceLinkInput.classList.add('modal-input');
+    sourceLinkInput.placeholder = 'Type source link here';
+
+    const descriptionInput = document.createElement('textarea');
+    descriptionInput.classList.add('modal-input');
+    descriptionInput.placeholder = 'Type source link here';
+
+    modalWindow.append(titleInput);
+    modalWindow.append(authorInput);
+    modalWindow.append(imgInput);
+    modalWindow.append(sourceLinkInput);
+    modalWindow.append(descriptionInput);
 
     const cancelBtn = document.createElement('button');
     modalWindow.append(cancelBtn);
     cancelBtn.classList.add('cancel-btn');
-    document.createTextNode('Cancel');
+    cancelBtn.append(document.createTextNode('Cancel'));
 
     const applyBtn = document.createElement('button');
     modalWindow.append(applyBtn);
     applyBtn.classList.add('apply-btn');
-    document.createTextNode('Apply');
+    applyBtn.append(document.createTextNode('Apply'));
 
-    cancelBtn.addEventListener('click', )
+    const cancelBtnHandler = () => modalWindow.remove();
+    const applyBtnHandler = () => {
+      alert('appply');
+      const newPostData = {};
+      newPostData.title = titleInput.value;
+      newPostData.author = authorInput.value;
+      newPostData.publishedAt = 'unknown date';
+      newPostData.urlToImage = imgInput.value;
+      newPostData.url = sourceLinkInput.value;
+      newPostData.description = descriptionInput.value;
 
-    applyBtn.addEventListener('click', )
+      console.log(newPostData);
+    };
+
+    cancelBtn.addEventListener('click', cancelBtnHandler);
+    applyBtn.addEventListener('click', applyBtnHandler);
 }
+
+const createPostBtnHandler = () => {
+  modalWindowCreator();
+};
+
+reloadBtn.addEventListener('click', () => document.location.reload());
+createPostBtn.addEventListener('click', createPostBtnHandler);
