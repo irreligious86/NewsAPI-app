@@ -30,7 +30,9 @@ body {
 }
 
 .header {
-    height: 150px;
+    height: 90px;
+    background-color: #1f240d;
+    border-bottom: 3px solid #20432074;
 }
 
 .content {
@@ -63,6 +65,12 @@ body {
     inset -10px -10px 25px rgba(0, 0, 0, 0.3);
     width: clamp(350px, 33vw, 400px);
     min-height: 50px;
+    transition: all .5s .5s ease-in-out;
+}
+
+.card:hover {
+  transform: scale(1.1);
+  border-color: lightgray;
 }
 
 .card-title {
@@ -87,15 +95,36 @@ body {
 
 
 .footer {
-    height: 100px;
+    height: 90px;
+    background-color: #1f240d;
 }
 
 .btn {
+  cursor: pointer;
+  background-color: #181818;
   margin: 12px;
   padding: 8px 16px;
+  color: wheat;
+  border: 4px solid;
   border-radius: 8px;
-  border: 1px solid gray;
-  cursor: pointer;
+
+  border-image: linear-gradient(
+    #ff512f,
+    #dd2476,
+    #1c64ff
+  ) 1;
+  animation: rotate 8s ease-in infinite;
+}
+
+@keyframes rotate {
+  50%{
+    border-image: linear-gradient(
+      360deg,
+      #ff512f,
+      #dd2476,
+      #1c64ff
+    ) 1;
+  }
 }
 
 .modal-window {

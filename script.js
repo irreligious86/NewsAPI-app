@@ -1,14 +1,13 @@
 const newsStorage = window.localStorage;
 const reloadBtn = document.querySelector('.reload-btn');
+const clrLsBtn = document.querySelector('.clear-ls-btn');
 const createPostBtn = document.querySelector('.create-post-btn');
 const cardPlaceholder = document.querySelector('.card-placeholder');
 let newsServerLink = "https://newsapi.org/v2/top-headlines?country=ua&apiKey=c72e232594004f868b23074156aa6ec8";
 
-localStorage.clear();
-
 const updateLocalStorage = (key, value) => {
     localStorage.setItem(key, value);
-    console.log(localStorage.getItem(key));
+    // console.log(localStorage.getItem(key));
 }
 
 const checkCyrillic = (str) => {
@@ -46,10 +45,9 @@ const cardBuilder = (obj) => {
 }
 
 const renderAllNews = (data) => {
-    // console.log(data.articles.slice(0, 31));
-    data.articles
+    JSON.parse(localStorage.getItem('articles'))
         .slice(0, 200)
-        .filter(obj => checkCyrillic(obj.title))
+        // .filter(obj => checkCyrillic(obj.title))
         .forEach(item => cardBuilder(item));
 }
 
@@ -64,17 +62,12 @@ const getFetchData = (url) => {
             }
         })
         .then(res => {
-            console.log(res.articles);
+            // console.log(JSON.stringify(res.articles));
             return res;
         })
-        .then(res => renderAllNews(res))
+        .then(res => updateLocalStorage('articles', JSON.stringify(res.articles)))
         .catch(error => console.log('ERROR', error));
 }
-
-getFetchData(newsServerLink);
-
-// console.log(newsStorage);
-// console.log(localStorage.getItem('res'));
 
 const modalWindowCreator = () => {
     const modalWindow = document.createElement('div');
@@ -120,16 +113,30 @@ const modalWindowCreator = () => {
 
     const cancelBtnHandler = () => modalWindow.remove();
     const applyBtnHandler = () => {
-      alert('appply');
+      const defVals = {
+        'defTitle': 'JavaScript self-education',
+        'defImg': 'https://mate-academy-images.s3.eu-central-1.amazonaws.com/64047cd018874286835b923a562f903d.png',
+        'defUrl': 'https://learn.javascript.ru/',
+        'defDescr': 'JavaScript — мультипарадигменный язык программирования. Поддерживает объектно-ориентированный, императивный и функциональный стили. Является реализацией спецификации ECMAScript. ',
+        'defPublished': 'unknown date',
+        'defAuthor': 'unknown author',
+      };
       const newPostData = {};
-      newPostData.title = titleInput.value;
-      newPostData.author = authorInput.value;
-      newPostData.publishedAt = 'unknown date';
-      newPostData.urlToImage = imgInput.value;
-      newPostData.url = sourceLinkInput.value;
-      newPostData.description = descriptionInput.value;
+      newPostData.title = titleInput.value || defVals.defTitle;
+      newPostData.author = authorInput.value || defVals.defAuthor;
+      newPostData.urlToImage = imgInput.value || defVals.defImg;
+      newPostData.url = sourceLinkInput.value || defVals.defUrl;
+      newPostData.publishedAt = defVals.defPublished;
+      newPostData.description = descriptionInput.value || defVals.defDescr;
+      
+      modalWindow.remove();
+      const tempData = JSON.parse(localStorage.getItem('articles'));
+      tempData.unshift(newPostData);
+      localStorage.setItem('articles', JSON.stringify(tempData));
 
-      console.log(newPostData);
+      console.log( JSON.parse(localStorage.getItem('articles')) );
+      console.log( localStorage );
+      renderAllNews(localStorage);
     };
 
     cancelBtn.addEventListener('click', cancelBtnHandler);
@@ -137,8 +144,14 @@ const modalWindowCreator = () => {
 }
 
 const createPostBtnHandler = () => {
-  modalWindowCreator();
-};
+  const newPost = modalWindowCreator();
+}
+
+getFetchData(newsServerLink);
+
+renderAllNews(localStorage);
 
 reloadBtn.addEventListener('click', () => document.location.reload());
+clrLsBtn.addEventListener('click', () => localStorage.clear());
 createPostBtn.addEventListener('click', createPostBtnHandler);
+
